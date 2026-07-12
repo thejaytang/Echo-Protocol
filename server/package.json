@@ -1,0 +1,25 @@
+{
+  "name": "mirage-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/index.mjs",
+    "start": "NODE_ENV=production node src/index.mjs",
+    "migrate:postgres": "node scripts/migrate_postgres.mjs",
+    "backup:postgres": "node scripts/backup_postgres_snapshot.mjs",
+    "restore:postgres": "node scripts/restore_postgres_snapshot.mjs",
+    "verify:production": "node scripts/verify_production_readiness.mjs",
+    "balance": "node scripts/simulate_balance.mjs",
+    "ai:quality": "node scripts/evaluate_ai_quality.mjs",
+    "stress": "node scripts/simulate_multiclient_stress.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}

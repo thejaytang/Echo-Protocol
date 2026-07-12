@@ -1,0 +1,5 @@
+#include "Config.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER = com.mirage.app.debug
+MIRAGE_API_BASE_URL = http://127.0.0.1:8787
+OTHER_SWIFT_FLAGS = $(inherited) -D DEBUG

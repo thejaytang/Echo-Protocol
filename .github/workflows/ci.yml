@@ -1,0 +1,65 @@
+name: Mirage CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install server dependencies
+        working-directory: server
+        run: npm ci --ignore-scripts
+      - name: Test server
+        working-directory: server
+        run: npm test
+      - name: Smoke server
+        run: node server/scripts/smoke.mjs
+      - name: Docker build
+        run: docker build -t mirage-server:ci .
+
+  ios-structure:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install server dependencies
+        working-directory: server
+        run: npm ci --ignore-scripts
+      - name: Release gate
+        run: node scripts/release_gate.mjs
+      - name: Lint plist files
+        run: |
+          plutil -lint \
+            ios/Mirage/Mirage/Info.plist \
+            ios/Mirage/Mirage/Info.Debug.plist \
+            ios/Mirage/Mirage/Mirage.entitlements \
+            ios/Mirage/Mirage/PrivacyInfo.xcprivacy \
+            ios/Mirage/Mirage.xcodeproj/project.pbxproj \
+            ios/Mirage/ExportOptions.plist
+      - name: Validate shared scheme
+        run: xmllint --noout ios/Mirage/Mirage.xcodeproj/xcshareddata/xcschemes/Mirage.xcscheme
+      - name: Swift typecheck
+        run: |
+          swiftc -typecheck \
+            ios/Mirage/Mirage/MirageApp.swift \
+            ios/Mirage/Mirage/MirageModels.swift \
+            ios/Mirage/Mirage/MirageAPIClient.swift \
+            ios/Mirage/Mirage/MirageStore.swift \
+            ios/Mirage/Mirage/MirageViews.swift \
+            ios/Mirage/Mirage/KeychainTokenStore.swift
+      - name: Xcode build
+        run: |
+          xcodebuild \
+            -project ios/Mirage/Mirage.xcodeproj \
+            -scheme Mirage \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            build

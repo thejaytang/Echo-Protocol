@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+mirage-prototype/node_modules
+mirage-prototype/dist
+server/data
+ios
+docs
+*.log
