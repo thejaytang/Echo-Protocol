@@ -40,7 +40,7 @@ flowchart TD
 
 ## 4. Requirements and current limits
 
-Development project, not a confirmed App Store release. Full iOS build/archive and real service configuration are separate requirements. The repository records historical backend checks; this documentation update does not rerun them. The web prototype is an earlier visual study, not the current native client.
+Development project, not a confirmed App Store release. Full iOS build/archive and real service configuration are separate requirements. The CI run triggered by this update reports a failed game-mode flow assertion (`classicMode.flow` should include “创建房间”); both backend and iOS-structure jobs remain red. See the [check results](https://github.com/thejaytang/Echo-Protocol/actions/runs/35663514847). The preceding commit also had failing CI; this update changes presentation files only. The web prototype is an earlier visual study, not the current native client.
 
 ## 5. Documentation and sources
 
